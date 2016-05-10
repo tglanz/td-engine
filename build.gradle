@@ -25,4 +25,7 @@ dependencies {
 
     // rx
     compile 'io.reactivex:rxjava:1.0.10'
+
+    // math
+    compile 'org.apache.commons:commons-math3:3.6.1'
 }
