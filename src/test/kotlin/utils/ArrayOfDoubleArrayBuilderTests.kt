@@ -22,13 +22,13 @@ class ArrayOfDoubleArrayBuilderTests {
 
     @Test(expected = OutOfRangeException::class)
     fun arrayOfDoubleArrayBuilder_buildDoubleArrayOverflowDimensions_outOfRangeException(){
-        val matrix = ArrayOfDoubleArrayBuilder.build(1, 1,
+        ArrayOfDoubleArrayBuilder.build(1, 1,
                 0.0, 1.0)
     }
 
     @Test(expected = OutOfRangeException::class)
     fun arrayOfDoubleArrayBuilder_buildDoubleArrayUnderflowDimensions_outOfRangeException(){
-        val matrix = ArrayOfDoubleArrayBuilder.build(2, 2,
+        ArrayOfDoubleArrayBuilder.build(2, 2,
                 0.0)
     }
 }
