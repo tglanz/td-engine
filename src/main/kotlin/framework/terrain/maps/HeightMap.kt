@@ -1,62 +1,50 @@
 package framework.terrain.maps
 
-import com.sun.javafx.geom.Matrix3f
-import com.sun.javafx.geom.Vec2f
-import com.sun.javafx.geom.Vec3f
 import framework.terrain.TerrainObject
+import org.apache.commons.math3.geometry.euclidean.threed.Euclidean3D
 import org.apache.commons.math3.geometry.euclidean.threed.Plane
 import org.apache.commons.math3.geometry.euclidean.threed.Vector3D
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D
-import java.awt.List
+import org.apache.commons.math3.linear.MatrixUtils
 import java.util.*
 
-class HeightMap() : TerrainObject(){
+class HeightMap(rows: Array<DoubleArray>) : TerrainObject(){
 
-    private var _matrixRows: Array<Array<Float>> = arrayOf<Array<Float>>()
-    private val _scale = Vec3f()
+    private val _matrix = MatrixUtils.createRealMatrix(rows)
+    private var _scale = Vector3D(1.0, 1.0, 1.0)
 
-    fun setRows(rows: Array<Array<Float>>){
-        var rowsList = ArrayList<Array<Float>>();
-
-        rows.forEach { floats ->
-            rowsList.add(floats.copyOf())
-        }
-
-        _matrixRows = rowsList.toTypedArray()
+    fun setScale(x: Double, y: Double, z: Double){
+        _scale = Vector3D(x, y, z)
     }
 
-    fun setScale(x: Float, y: Float, z: Float){
-        _scale.x = x
-        _scale.y = y
-        _scale.z = z
-    }
+    fun getHeightAtEntry(row: Int, column: Int) =
+            _matrix.getEntry(row, column) * _scale.z
 
-    fun setScale(scale: Vec3f) = setScale(scale.x, scale.y, scale.z)
-
-    fun getHeightAtPosition(row: Int, column: Int) =
-            _matrixRows[row][column] * _scale.z
-
-    fun getHeightAtCoord(x: Float, y: Float): Float {
-
-        // TODO: This is the main idea...
-        // Should be changed though to be precise
-
+    fun getHeightAtCoord(x: Double, y: Double): Double {
         val normalizedX = x / _scale.x
         val normalizedY = y / _scale.y
 
-        val row = Math.round(normalizedY)
-        val col = Math.round(normalizedX)
+        val row = Math.round(normalizedY - 0.5).toInt()
+        val col = Math.round(normalizedX - 0.5).toInt()
 
-        val z1 = _matrixRows[row][col]
-        val z2 = _matrixRows[row + 1][col]
-        val z3 = _matrixRows[row][col + 1]
+        val row1 = row + 1
+        val col1 = col + 1
 
-        val plane = Plane(
-                Vector3D(row.toDouble(), col.toDouble(), z1.toDouble()),
-                Vector3D((row + 1).toDouble(), col.toDouble(), z2.toDouble()),
-                Vector3D(row.toDouble(), (col + 1).toDouble(), z3.toDouble()),
-                0.0)
+        val z1 = _matrix.getEntry(row, col)
+        val z2 = _matrix.getEntry(row1, col)
+        val z3 = _matrix.getEntry(row, col1)
 
-        return plane.getPointAt(Vector2D(row.toDouble(), col.toDouble()), 0.0).z.toFloat()
+        val a = Vector3D(col * _scale.x, row * _scale.y, z1)
+        val b = Vector3D(col * _scale.x, row1 * _scale.y, z2)
+        val c = Vector3D(col1 * _scale.x, row * _scale.y, z3)
+
+        val ab = b.subtract(a)
+        val ac = c.subtract(a)
+        val cross = ab.crossProduct(ac)
+        val d = -1.0 * (cross.x * a.x + cross.y * a.y + cross.z * a.z)
+
+        val z = -1.0 / cross.z * (cross.x * x + cross.y * y + d)
+
+        return z
     }
 }
