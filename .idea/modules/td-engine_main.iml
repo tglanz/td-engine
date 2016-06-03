@@ -11,11 +11,15 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.inject:guice:4.0" level="project" />
     <orderEntry type="library" name="Gradle: io.reactivex:rxjava:1.0.10" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.commons:commons-math3:3.6.1" level="project" />
     <orderEntry type="library" name="Gradle: org.glassfish.grizzly:grizzly-http-server:2.3.24" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.6.2" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-runtime:1.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: javax.inject:javax.inject:1" level="project" />
+    <orderEntry type="library" name="Gradle: aopalliance:aopalliance:1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:guava:16.0.1" level="project" />
     <orderEntry type="library" name="Gradle: org.glassfish.grizzly:grizzly-http:2.3.24" level="project" />
     <orderEntry type="library" name="Gradle: org.glassfish.grizzly:grizzly-framework:2.3.24" level="project" />
   </component>
